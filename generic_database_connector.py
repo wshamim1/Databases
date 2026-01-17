@@ -133,9 +133,18 @@ class GenericDatabaseConnector:
             # Resolve environment variables in connection params
             conn_params = self._resolve_env_vars(self.config['connection_params'])
             
-            # Convert port to int if present
+            # Convert port to int if present and not empty
             if 'port' in conn_params and conn_params['port']:
-                conn_params['port'] = int(conn_params['port'])
+                try:
+                    conn_params['port'] = int(conn_params['port'])
+                except (ValueError, TypeError) as e:
+                    logger.error(f"Invalid port value '{conn_params['port']}': {e}")
+                    # Use default port if conversion fails
+                    if 'default_port' in self.config:
+                        conn_params['port'] = self.config['default_port']
+                        logger.info(f"Using default port: {conn_params['port']}")
+                    else:
+                        raise ValueError(f"Invalid port value and no default port configured")
             
             # Database-specific connection logic
             if self.config['type'] == 'relational':

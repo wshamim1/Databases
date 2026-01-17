@@ -11,7 +11,7 @@ databases:
       user: "${DB_USER}"
       password: "${DB_PASSWORD}"
       database: "${DB_NAME}"
-      port: "${PORT}"
+      port: "${DB_PORT}"
     features:
       - connection_pooling
       - transactions
@@ -27,11 +27,11 @@ databases:
     driver: "psycopg2"
     default_port: 5432
     connection_params:
-      host: "${DB_HOST}"
-      user: "${DB_USER}"
-      password: "${DB_PASSWORD}"
-      database: "${DB_NAME}"
-      port: "${PORT}"
+      host: "${PG_HOST}"
+      user: "${PG_USER}"
+      password: "${PG_PASSWORD}"
+      database: "${PG_DATABASE}"
+      port: "${PG_PORT}"
     features:
       - connection_pooling
       - transactions
@@ -109,7 +109,7 @@ databases:
     connection_params:
       host: "${MONGO_HOST}"
       port: "${MONGO_PORT}"
-      username: "${MONGO_USERNAME}"
+      username: "${MONGO_USER}"
       password: "${MONGO_PASSWORD}"
     features:
       - document_operations

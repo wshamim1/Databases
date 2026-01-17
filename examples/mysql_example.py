@@ -6,7 +6,10 @@ Shows basic CRUD operations and common patterns.
 """
 
 import sys
-sys.path.append('..')
+import os
+
+# Add parent directory to path to import modules
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from generic_database_connector import GenericDatabaseConnector
 from generic_database_manager import GenericDatabaseManager
@@ -30,6 +33,22 @@ def main():
         
         # Create manager
         manager = GenericDatabaseManager(db)
+        
+        # Create users table if it doesn't exist
+        logger.info("\n=== Creating Table ===")
+        cursor = db.get_connection().cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                age INT,
+                city VARCHAR(255)
+            )
+        """)
+        db.get_connection().commit()
+        cursor.close()
+        logger.info("✅ Users table ready")
         
         # 1. INSERT - Add new users
         logger.info("\n=== INSERT Operations ===")
@@ -56,9 +75,12 @@ def main():
         # 2. SELECT - Retrieve data
         logger.info("\n=== SELECT Operations ===")
         all_users = manager.find_all("users", limit=10)
-        logger.info(f"Found {len(all_users)} users:")
-        for user in all_users:
-            logger.info(f"  - {user.get('name')} ({user.get('email')})")
+        if all_users:
+            logger.info(f"Found {len(all_users)} users:")
+            for user in all_users:
+                logger.info(f"  - {user.get('name')} ({user.get('email')})")
+        else:
+            logger.info("No users found")
         
         # 3. UPDATE - Modify data
         logger.info("\n=== UPDATE Operations ===")
@@ -76,7 +98,10 @@ def main():
         
         # Final count
         final_users = manager.find_all("users", limit=100)
-        logger.info(f"\n✅ Final user count: {len(final_users)}")
+        if final_users:
+            logger.info(f"\n✅ Final user count: {len(final_users)}")
+        else:
+            logger.info(f"\n✅ Final user count: 0")
 
 
 if __name__ == "__main__":

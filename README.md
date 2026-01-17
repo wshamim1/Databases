@@ -47,28 +47,53 @@ This framework provides a **universal interface** for all major database systems
 
 ## 🚀 Quick Start
 
-### Installation
+### Option 1: Podman Setup (Recommended)
+
+Start all databases locally with one command:
 
 ```bash
-# Install core dependencies
+# 1. Install dependencies
 pip install -r requirements.txt
 
-# Or install specific database drivers
-pip install mysql-connector-python  # MySQL
-pip install pymongo                 # MongoDB
-pip install redis                   # Redis
-# ... etc
+# 2. Start databases (auto-creates .env!)
+./start-databases.sh start
+
+# 3. Run examples
+cd examples
+python3 mysql_example.py
+python3 multi_database_example.py
 ```
 
-### Configuration
+**That's it!** The script starts 11 databases and creates `.env` automatically.
+
+### Option 2: Manual Setup
 
 ```bash
-# Copy environment template
-cp .env.example .env
+# 1. Install core dependencies
+pip install -r requirements.txt
 
-# Edit .env with your credentials
-nano .env
+# 2. Configure environment
+cp .env.example .env
+nano .env  # Edit with your credentials
+
+# 3. Run examples
+cd examples
+python3 mysql_example.py
 ```
+
+### Podman Commands
+
+```bash
+./start-databases.sh start      # Start all databases
+./start-databases.sh stop       # Stop all databases
+./start-databases.sh status     # Show container status
+./start-databases.sh logs mysql # View logs
+./start-databases.sh info       # Show connection info
+./start-databases.sh env        # Create/update .env
+./start-databases.sh cleanup    # Remove containers & volumes
+```
+
+See [PODMAN_SETUP.md](PODMAN_SETUP.md) for detailed Podman documentation.
 
 ### Basic Usage
 
@@ -105,12 +130,16 @@ Databases/
 ├── generic_database_connector.py   # Universal connector
 ├── generic_database_manager.py     # Unified CRUD operations
 ├── README.md                       # This file
+├── BLOG_ARTICLE.md                 # Technical blog post
+├── PODMAN_SETUP.md                 # Podman setup guide
+├── podman-compose.yml              # Container definitions (11 databases)
+├── start-databases.sh              # Database management script
 └── examples/                       # Practical examples
     ├── README.md                   # Examples documentation
-    ├── mysql_example.py            # MySQL example
+    ├── mysql_example.py            # MySQL example (with table creation)
     ├── mongodb_example.py          # MongoDB example
     ├── redis_example.py            # Redis example
-    ├── postgresql_example.py       # PostgreSQL example
+    ├── postgresql_example.py       # PostgreSQL example (with table creation)
     └── multi_database_example.py   # Multi-database example
 ```
 
@@ -241,18 +270,36 @@ No code changes needed!
 
 ## 🧪 Testing
 
+### With Podman (Recommended)
+
+```bash
+# Start databases
+./start-databases.sh start
+
+# Wait for databases to be healthy (30-60 seconds)
+./start-databases.sh status
+
+# Run examples (tables auto-create)
+cd examples
+python3 mysql_example.py
+python3 mongodb_example.py
+python3 postgresql_example.py
+python3 redis_example.py
+python3 multi_database_example.py
+```
+
+### Manual Testing
+
 ```bash
 # Test connection to any database
-python generic_database_connector.py
+python3 generic_database_connector.py
 
 # Test CRUD operations
-python generic_database_manager.py
+python3 generic_database_manager.py
 
 # Run examples
 cd examples
-python mysql_example.py
-python mongodb_example.py
-python multi_database_example.py
+python3 mysql_example.py
 ```
 
 ## 📚 Documentation
@@ -319,6 +366,16 @@ For issues or questions:
 
 ## 🚀 Getting Started
 
+### Quick Start (3 Commands)
+
+```bash
+git clone <repository-url> && cd Databases
+pip install -r requirements.txt
+./start-databases.sh start
+```
+
+### Detailed Steps
+
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
@@ -328,18 +385,20 @@ For issues or questions:
 2. **Install dependencies**
    ```bash
    pip install -r requirements.txt
+   pip install podman-compose  # For Podman support
    ```
 
-3. **Configure environment**
+3. **Start databases (Podman)**
    ```bash
-   cp .env.example .env
-   # Edit .env with your credentials
+   ./start-databases.sh start
+   # This starts 11 databases and creates .env automatically
    ```
 
 4. **Run examples**
    ```bash
    cd examples
-   python mysql_example.py
+   python3 mysql_example.py
+   python3 multi_database_example.py
    ```
 
 5. **Build your application**
@@ -347,8 +406,26 @@ For issues or questions:
    from generic_database_connector import GenericDatabaseConnector
    from generic_database_manager import GenericDatabaseManager
    
-   # Your code here
+   # Connect to any database
+   with GenericDatabaseConnector("mysql") as db:
+       manager = GenericDatabaseManager(db)
+       # Your code here
    ```
+
+### Available Databases (Podman)
+
+When you run `./start-databases.sh start`, you get:
+- MySQL (port 3306)
+- PostgreSQL (port 5432)
+- MongoDB (port 27017)
+- Redis (port 6379)
+- Elasticsearch (port 9200)
+- Cassandra (port 9042)
+- Neo4j (ports 7474, 7687)
+- InfluxDB (port 8086)
+- MariaDB (port 3307)
+- CouchDB (port 5984)
+- Milvus (port 19530)
 
 ---
 

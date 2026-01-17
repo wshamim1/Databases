@@ -6,7 +6,10 @@ Shows advanced SQL features and JSONB support.
 """
 
 import sys
-sys.path.append('..')
+import os
+
+# Add parent directory to path to import modules
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from generic_database_connector import GenericDatabaseConnector
 from generic_database_manager import GenericDatabaseManager
@@ -30,6 +33,23 @@ def main():
         
         # Create manager
         manager = GenericDatabaseManager(db)
+        
+        # Create employees table if it doesn't exist
+        logger.info("\n=== Creating Table ===")
+        cursor = db.get_connection().cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS employees (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                department VARCHAR(255),
+                salary INTEGER,
+                hire_date DATE
+            )
+        """)
+        db.get_connection().commit()
+        cursor.close()
+        logger.info("✅ Employees table ready")
         
         # 1. INSERT - Add records
         logger.info("\n=== INSERT Operations ===")
