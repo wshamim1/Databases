@@ -1,0 +1,447 @@
+# Database Configuration File
+# This file defines all database connections and their specific properties
+
+databases:
+  mysql:
+    type: "relational"
+    driver: "mysql.connector"
+    default_port: 3306
+    connection_params:
+      host: "${DB_HOST}"
+      user: "${DB_USER}"
+      password: "${DB_PASSWORD}"
+      database: "${DB_NAME}"
+      port: "${PORT}"
+    features:
+      - connection_pooling
+      - transactions
+      - prepared_statements
+      - batch_operations
+    query_syntax:
+      placeholder: "%s"
+      identifier_quote: "`"
+      limit_clause: "LIMIT {limit} OFFSET {offset}"
+      
+  postgresql:
+    type: "relational"
+    driver: "psycopg2"
+    default_port: 5432
+    connection_params:
+      host: "${DB_HOST}"
+      user: "${DB_USER}"
+      password: "${DB_PASSWORD}"
+      database: "${DB_NAME}"
+      port: "${PORT}"
+    features:
+      - connection_pooling
+      - transactions
+      - prepared_statements
+      - batch_operations
+      - returning_clause
+    query_syntax:
+      placeholder: "%s"
+      identifier_quote: "\""
+      limit_clause: "LIMIT {limit} OFFSET {offset}"
+      
+  oracle:
+    type: "relational"
+    driver: "cx_Oracle"
+    default_port: 1521
+    connection_params:
+      user: "${DB_USER}"
+      password: "${DB_PASSWORD}"
+      dsn: "${DB_HOST}:${PORT}/${DB_NAME}"
+    features:
+      - connection_pooling
+      - transactions
+      - prepared_statements
+      - sequences
+      - packages
+    query_syntax:
+      placeholder: ":{}"
+      identifier_quote: "\""
+      limit_clause: "FETCH FIRST {limit} ROWS ONLY"
+      
+  db2:
+    type: "relational"
+    driver: "ibm_db"
+    default_port: 50000
+    connection_params:
+      database: "${DB_NAME}"
+      hostname: "${DB_HOST}"
+      port: "${PORT}"
+      protocol: "TCPIP"
+      uid: "${DB_USER}"
+      pwd: "${DB_PASSWORD}"
+    features:
+      - transactions
+      - prepared_statements
+      - stored_procedures
+    query_syntax:
+      placeholder: "?"
+      identifier_quote: "\""
+      limit_clause: "FETCH FIRST {limit} ROWS ONLY"
+      
+  sqlserver:
+    type: "relational"
+    driver: "pyodbc"
+    default_port: 1433
+    connection_params:
+      server: "${DB_HOST},${PORT}"
+      database: "${DB_NAME}"
+      user: "${DB_USER}"
+      password: "${DB_PASSWORD}"
+      driver: "{ODBC Driver 17 for SQL Server}"
+    features:
+      - transactions
+      - prepared_statements
+      - stored_procedures
+      - identity_columns
+    query_syntax:
+      placeholder: "?"
+      identifier_quote: "[]"
+      limit_clause: "OFFSET {offset} ROWS FETCH NEXT {limit} ROWS ONLY"
+      
+  mongodb:
+    type: "nosql_document"
+    driver: "pymongo"
+    default_port: 27017
+    connection_params:
+      host: "${MONGO_HOST}"
+      port: "${MONGO_PORT}"
+      username: "${MONGO_USERNAME}"
+      password: "${MONGO_PASSWORD}"
+    features:
+      - document_operations
+      - aggregation
+      - indexing
+      - schema_validation
+    operations:
+      insert: "insert_one"
+      insert_many: "insert_many"
+      find: "find"
+      update: "update_one"
+      delete: "delete_one"
+      
+  elasticsearch:
+    type: "nosql_search"
+    driver: "elasticsearch"
+    default_port: 9200
+    connection_params:
+      hosts: ["${ES_HOST}:${ES_PORT}"]
+      http_auth: ["${ES_USER}", "${ES_PASSWORD}"]
+    features:
+      - full_text_search
+      - aggregations
+      - indexing
+      - bulk_operations
+    operations:
+      insert: "index"
+      search: "search"
+      update: "update"
+      delete: "delete"
+      
+  cassandra:
+    type: "nosql_wide_column"
+    driver: "cassandra.cluster"
+    default_port: 9042
+    connection_params:
+      contact_points: ["${CASSANDRA_HOST}"]
+      port: "${CASSANDRA_PORT}"
+      auth_provider: "PlainTextAuthProvider"
+    features:
+      - distributed
+      - cql_queries
+      - prepared_statements
+      - batch_operations
+    query_syntax:
+      placeholder: "?"
+      identifier_quote: "\""
+      
+  milvus:
+    type: "vector_database"
+    driver: "pymilvus"
+    default_port: 19530
+    connection_params:
+      host: "${MILVUS_HOST}"
+      port: "${MILVUS_PORT}"
+    features:
+      - vector_search
+      - similarity_search
+      - indexing
+      - partitions
+    operations:
+      insert: "insert"
+      search: "search"
+      query: "query"
+      
+  netezza:
+    type: "data_warehouse"
+    driver: "pyodbc"
+    default_port: 5480
+    connection_params:
+      server: "${DB_HOST}"
+      database: "${DB_NAME}"
+      uid: "${DB_USER}"
+      pwd: "${DB_PASSWORD}"
+      port: "${PORT}"
+    features:
+      - bulk_loading
+      - distribution_keys
+      - zone_maps
+    query_syntax:
+      placeholder: "?"
+      identifier_quote: "\""
+      limit_clause: "LIMIT {limit} OFFSET {offset}"
+      
+  redis:
+    type: "nosql_key_value"
+    driver: "redis"
+    default_port: 6379
+    connection_params:
+      host: "${REDIS_HOST}"
+      port: "${REDIS_PORT}"
+      password: "${REDIS_PASSWORD}"
+      db: "${REDIS_DB}"
+      decode_responses: true
+    features:
+      - key_value_store
+      - pub_sub
+      - transactions
+      - lua_scripting
+      - ttl_support
+    operations:
+      set: "set"
+      get: "get"
+      delete: "delete"
+      exists: "exists"
+      
+  dynamodb:
+    type: "nosql_key_value"
+    driver: "boto3"
+    default_port: 443
+    connection_params:
+      region_name: "${AWS_REGION}"
+      aws_access_key_id: "${AWS_ACCESS_KEY_ID}"
+      aws_secret_access_key: "${AWS_SECRET_ACCESS_KEY}"
+    features:
+      - serverless
+      - auto_scaling
+      - global_tables
+      - streams
+      - transactions
+    operations:
+      put_item: "put_item"
+      get_item: "get_item"
+      query: "query"
+      scan: "scan"
+      
+  couchdb:
+    type: "nosql_document"
+    driver: "couchdb"
+    default_port: 5984
+    connection_params:
+      url: "http://${COUCHDB_HOST}:${COUCHDB_PORT}"
+      user: "${COUCHDB_USER}"
+      password: "${COUCHDB_PASSWORD}"
+    features:
+      - document_store
+      - map_reduce
+      - replication
+      - http_api
+    operations:
+      create: "create_document"
+      read: "get_document"
+      update: "update_document"
+      delete: "delete_document"
+      
+  neo4j:
+    type: "graph_database"
+    driver: "neo4j"
+    default_port: 7687
+    connection_params:
+      uri: "bolt://${NEO4J_HOST}:${NEO4J_PORT}"
+      auth: ["${NEO4J_USER}", "${NEO4J_PASSWORD}"]
+    features:
+      - graph_queries
+      - cypher_language
+      - acid_transactions
+      - indexing
+    query_syntax:
+      language: "cypher"
+      create_node: "CREATE (n:Label {property: value})"
+      match_pattern: "MATCH (n:Label) WHERE n.property = value RETURN n"
+      
+  influxdb:
+    type: "time_series"
+    driver: "influxdb_client"
+    default_port: 8086
+    connection_params:
+      url: "http://${INFLUXDB_HOST}:${INFLUXDB_PORT}"
+      token: "${INFLUXDB_TOKEN}"
+      org: "${INFLUXDB_ORG}"
+      bucket: "${INFLUXDB_BUCKET}"
+    features:
+      - time_series_data
+      - continuous_queries
+      - retention_policies
+      - downsampling
+    operations:
+      write: "write_api"
+      query: "query_api"
+      delete: "delete_api"
+      
+  timescaledb:
+    type: "time_series"
+    driver: "psycopg2"
+    default_port: 5432
+    connection_params:
+      host: "${DB_HOST}"
+      user: "${DB_USER}"
+      password: "${DB_PASSWORD}"
+      database: "${DB_NAME}"
+      port: "${PORT}"
+    features:
+      - time_series_optimized
+      - postgresql_compatible
+      - hypertables
+      - continuous_aggregates
+      - compression
+    query_syntax:
+      placeholder: "%s"
+      identifier_quote: "\""
+      limit_clause: "LIMIT {limit} OFFSET {offset}"
+      
+  clickhouse:
+    type: "columnar_database"
+    driver: "clickhouse_driver"
+    default_port: 9000
+    connection_params:
+      host: "${CLICKHOUSE_HOST}"
+      port: "${CLICKHOUSE_PORT}"
+      user: "${CLICKHOUSE_USER}"
+      password: "${CLICKHOUSE_PASSWORD}"
+      database: "${CLICKHOUSE_DB}"
+    features:
+      - columnar_storage
+      - real_time_analytics
+      - distributed_queries
+      - compression
+    query_syntax:
+      placeholder: "%s"
+      identifier_quote: "`"
+      limit_clause: "LIMIT {limit} OFFSET {offset}"
+      
+  mariadb:
+    type: "relational"
+    driver: "mysql.connector"
+    default_port: 3306
+    connection_params:
+      host: "${DB_HOST}"
+      user: "${DB_USER}"
+      password: "${DB_PASSWORD}"
+      database: "${DB_NAME}"
+      port: "${PORT}"
+    features:
+      - mysql_compatible
+      - connection_pooling
+      - transactions
+      - prepared_statements
+      - json_support
+    query_syntax:
+      placeholder: "%s"
+      identifier_quote: "`"
+      limit_clause: "LIMIT {limit} OFFSET {offset}"
+      
+  sqlite:
+    type: "relational"
+    driver: "sqlite3"
+    default_port: 0
+    connection_params:
+      database: "${SQLITE_DB_PATH}"
+    features:
+      - embedded
+      - serverless
+      - transactions
+      - full_text_search
+    query_syntax:
+      placeholder: "?"
+      identifier_quote: "\""
+      limit_clause: "LIMIT {limit} OFFSET {offset}"
+      
+  cockroachdb:
+    type: "relational"
+    driver: "psycopg2"
+    default_port: 26257
+    connection_params:
+      host: "${DB_HOST}"
+      user: "${DB_USER}"
+      password: "${DB_PASSWORD}"
+      database: "${DB_NAME}"
+      port: "${PORT}"
+      sslmode: "require"
+    features:
+      - distributed
+      - postgresql_compatible
+      - acid_transactions
+      - horizontal_scaling
+    query_syntax:
+      placeholder: "%s"
+      identifier_quote: "\""
+      limit_clause: "LIMIT {limit} OFFSET {offset}"
+      
+  arangodb:
+    type: "multi_model"
+    driver: "pyArango"
+    default_port: 8529
+    connection_params:
+      url: "http://${ARANGO_HOST}:${ARANGO_PORT}"
+      username: "${ARANGO_USER}"
+      password: "${ARANGO_PASSWORD}"
+    features:
+      - document_store
+      - graph_database
+      - key_value_store
+      - aql_query_language
+      - joins
+    operations:
+      insert: "insert"
+      find: "find"
+      update: "update"
+      delete: "delete"
+      
+  scylladb:
+    type: "nosql_wide_column"
+    driver: "cassandra.cluster"
+    default_port: 9042
+    connection_params:
+      contact_points: ["${SCYLLA_HOST}"]
+      port: "${SCYLLA_PORT}"
+    features:
+      - cassandra_compatible
+      - high_performance
+      - distributed
+      - cql_queries
+    query_syntax:
+      placeholder: "?"
+      identifier_quote: "\""
+      
+  firestore:
+    type: "nosql_document"
+    driver: "google.cloud.firestore"
+    default_port: 443
+    connection_params:
+      project_id: "${GCP_PROJECT_ID}"
+      credentials_path: "${GCP_CREDENTIALS_PATH}"
+    features:
+      - serverless
+      - real_time_sync
+      - offline_support
+      - auto_scaling
+    operations:
+      add: "add"
+      get: "get"
+      update: "update"
+      delete: "delete"
+
+# Made with Bob

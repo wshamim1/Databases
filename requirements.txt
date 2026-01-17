@@ -1,0 +1,97 @@
+# Generic Database Framework - Python Dependencies
+# Install all: pip install -r requirements.txt
+# Or install specific database drivers as needed
+
+# ==================== Core Dependencies ====================
+python-dotenv>=1.0.0
+pyyaml>=6.0
+
+# ==================== Relational Databases ====================
+# MySQL
+mysql-connector-python>=8.0.0
+
+# PostgreSQL
+psycopg2-binary>=2.9.0
+
+# Oracle
+cx_Oracle>=8.0.0
+
+# DB2
+ibm_db>=3.0.0
+
+# SQL Server & Netezza (ODBC-based)
+pyodbc>=4.0.0
+
+# MariaDB (uses MySQL driver)
+# mysql-connector-python>=8.0.0 (already included above)
+
+# SQLite (built into Python)
+# No additional package needed
+
+# CockroachDB (uses PostgreSQL driver)
+# psycopg2-binary>=2.9.0 (already included above)
+
+# TimescaleDB (uses PostgreSQL driver)
+# psycopg2-binary>=2.9.0 (already included above)
+
+# ==================== NoSQL Databases ====================
+# MongoDB
+pymongo>=4.0.0
+
+# Elasticsearch
+elasticsearch>=8.0.0
+
+# Cassandra
+cassandra-driver>=3.25.0
+
+# CouchDB
+CouchDB>=1.2
+
+# ==================== Key-Value Stores ====================
+# Redis
+redis>=4.5.0
+
+# DynamoDB (AWS)
+boto3>=1.26.0
+
+# ==================== Graph Databases ====================
+# Neo4j
+neo4j>=5.0.0
+
+# ArangoDB
+pyArango>=2.0.0
+
+# ==================== Time Series Databases ====================
+# InfluxDB
+influxdb-client>=1.36.0
+
+# ==================== Columnar Databases ====================
+# ClickHouse
+clickhouse-driver>=0.2.0
+
+# ==================== Vector Databases ====================
+# Milvus
+pymilvus>=2.0.0
+
+# ==================== Wide Column Stores ====================
+# ScyllaDB (uses Cassandra driver)
+# cassandra-driver>=3.25.0 (already included above)
+
+# ==================== Cloud Databases ====================
+# Firestore (Google Cloud)
+google-cloud-firestore>=2.11.0
+
+# ==================== Optional Dependencies ====================
+# Type checking
+# mypy>=1.0.0
+
+# Testing
+# pytest>=7.0.0
+# pytest-cov>=4.0.0
+
+# Linting
+# pylint>=2.15.0
+# black>=23.0.0
+
+# Documentation
+# sphinx>=5.0.0
